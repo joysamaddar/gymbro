@@ -28,7 +28,7 @@ export default function RootLayout({
       }}
     >
       <html lang="en" className="dark">
-        <body className={inter.className}>
+        <body className={cn(inter.className, "mx-auto w-full max-w-screen-xl px-2.5 md:px-20")}>
           <Navbar />
           {children}
         </body>
