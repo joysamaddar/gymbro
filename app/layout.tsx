@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import Navbar from "@/components/navbar";
 import { cn } from "@/lib/utils";
+import TrpcClientProvider from "@/components/TrpcClientProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,20 +20,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider
-      appearance={{
-        baseTheme: dark,
-        variables: {
-          colorPrimary: "hsl(0 72.2% 50.6%)",
-        },
-      }}
-    >
-      <html lang="en" className="dark">
-        <body className={cn(inter.className, "mx-auto w-full max-w-screen-xl px-2.5 md:px-20")}>
-          <Navbar />
-          {children}
-        </body>
-      </html>
-    </ClerkProvider>
+    <TrpcClientProvider>
+      <ClerkProvider
+        appearance={{
+          baseTheme: dark,
+          variables: {
+            colorPrimary: "hsl(0 72.2% 50.6%)",
+          },
+        }}
+      >
+        <html lang="en" className="dark">
+          <body
+            className={cn(
+              inter.className,
+              "mx-auto w-full max-w-screen-xl px-2.5 md:px-20"
+            )}
+          >
+            <Navbar />
+            {children}
+          </body>
+        </html>
+      </ClerkProvider>
+    </TrpcClientProvider>
   );
 }
