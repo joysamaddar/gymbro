@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Gymbro - The only gym bro you will ever need.",
 };
 
-export default async function RootLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
