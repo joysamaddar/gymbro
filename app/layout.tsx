@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
-import Navbar from "@/components/navbar";
 import { cn } from "@/lib/utils";
 import TrpcClientProvider from "@/components/TrpcClientProvider";
 
@@ -30,13 +29,7 @@ export default function RootLayout({
         }}
       >
         <html lang="en" className="dark">
-          <body
-            className={cn(
-              inter.className,
-              "mx-auto w-full max-w-screen-xl px-2.5 md:px-20"
-            )}
-          >
-            <Navbar />
+          <body className={cn(inter.className)}>
             {children}
           </body>
         </html>

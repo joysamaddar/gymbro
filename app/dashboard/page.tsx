@@ -1,5 +1,63 @@
-export default function Dashboard(){
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import Link from "next/link";
+
+const dashboardCardItems = [
+  {
+    title: "Workouts",
+    description: "Create your workout plan in a few easy steps.",
+    features: [
+      "Generate your workout plan in seconds.",
+      "ChatGPT analyses your needs and recommends the best workout for you.",
+    ],
+    link: "/dashboard/workouts",
+  },
+  {
+    title: "Meals",
+    description: "Get a diet plan in a few easy steps.",
+    features: [
+      "Generate your diet chart in 3..2...1...",
+      "Get meal plans based on your preferred diet type and goals.",
+      "Get meal plans based on ingredients available near you.",
+      "Vegan? Lactose intolerant? Allergies? Don&apos;t worry, we got you.",
+    ],
+    link: "/dashboard/meals",
+  },
+];
+
+export default function Dashboard() {
   return (
-    <p>Hi</p>
-  )
+    <div className="px-4 py-8 flex flex-col gap-8">
+      <h2 className="text-2xl font-semibold tracking-wide">Home</h2>
+      <div className="flex gap-8 flex-wrap justify-center">
+        {dashboardCardItems.map((item, i) => (
+          <Card className="w-[350px] flex flex-col" key={i}>
+            <CardHeader>
+              <CardTitle>{item.title}</CardTitle>
+              <CardDescription>{item.description}</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-1">
+              <ul className="text-sm text-muted-foreground list-disc list-outside flex flex-col gap-2 ml-3">
+                {item.features.map((feat, j) => (
+                  <li key={j}>{feat}</li>
+                ))}
+              </ul>
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <Link href={item.link}>
+                <Button>Create</Button>
+              </Link>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
 }
