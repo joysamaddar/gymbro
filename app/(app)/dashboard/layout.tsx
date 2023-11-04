@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import DashboardSidebar from "@/components/DashboardSidebar";
-import { currentUser } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Dashboard",

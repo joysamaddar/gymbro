@@ -1,3 +1,4 @@
+import Heading from "@/components/Heading";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -35,7 +36,7 @@ const dashboardCardItems = [
 export default function Dashboard() {
   return (
     <div className="px-4 py-8 flex flex-col gap-8">
-      <h2 className="text-2xl font-semibold tracking-wide">Home</h2>
+      <Heading>Home</Heading>
       <div className="flex gap-8 flex-wrap justify-center">
         {dashboardCardItems.map((item, i) => (
           <Card className="w-[350px] flex flex-col" key={i}>
