@@ -27,7 +27,7 @@ const dashboardCardItems = [
       "Generate your diet chart in 3..2...1...",
       "Get meal plans based on your preferred diet type and goals.",
       "Get meal plans based on ingredients available near you.",
-      "Vegan? Lactose intolerant? Allergies? Don&apos;t worry, we got you.",
+      "Vegan? Lactose intolerant? Don't worry, we got you.",
     ],
     link: "/dashboard/meals",
   },
@@ -36,7 +36,7 @@ const dashboardCardItems = [
 export default function Dashboard() {
   return (
     <div className="px-4 py-8 flex flex-col gap-8">
-      <Heading>Home</Heading>
+      <Heading title="Home" />
       <div className="flex gap-8 flex-wrap justify-center">
         {dashboardCardItems.map((item, i) => (
           <Card className="w-[350px] flex flex-col" key={i}>

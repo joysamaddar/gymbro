@@ -6,14 +6,14 @@ export const metadata: Metadata = {
   description: "Gymbro - The only gym bro you will ever need.",
 };
 
-export default async function DashboardLayout({
+export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <div className="flex">
-      <DashboardSidebar/>
+      <DashboardSidebar />
       <main className="flex-1">{children}</main>
     </div>
   );

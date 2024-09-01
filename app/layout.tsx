@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { cn } from "@/lib/utils";
 import TrpcClientProvider from "@/components/TrpcClientProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,6 +32,7 @@ export default function RootLayout({
         <html lang="en" className="dark">
           <body className={cn(inter.className)}>
             {children}
+            <Toaster />
           </body>
         </html>
       </ClerkProvider>

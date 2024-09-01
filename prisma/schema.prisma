@@ -9,5 +9,51 @@ datasource db {
 }
 
 model User {
-  id String @id @unique
+  id           String        @id @default(cuid())
+  clerkId      String        @unique
+  workoutPlans WorkoutPlan[]
+  mealPlans    MealPlan[]
+}
+
+model WorkoutPlan {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  gender         String
+  age            Int
+  height         Float
+  weight         Float
+  currentBodyFat Float
+  targetBodyFat  Float
+  daysPerWeek    Int
+  workoutType    String
+  hoursPerDay    Float
+  goal           String
+  disabilities   String?
+  plan           String   @db.Text
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model MealPlan {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  gender         String
+  age            Int
+  height         Float
+  weight         Float
+  currentBodyFat Float
+  targetBodyFat  Float
+  allergies      String?
+  dietPreference String
+  dietType       String
+  region         String
+  plan           String   @db.Text
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([userId])
 }
