@@ -14,7 +14,7 @@ export async function GET() {
       redirect("/dashboard");
     } else {
       await prisma.user.create({
-        data: { id: userId },
+        data: { clerkId: userId },
       });
       redirect("/dashboard");
     }
