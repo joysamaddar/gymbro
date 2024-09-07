@@ -6,6 +6,7 @@ import { auth } from "@clerk/nextjs";
 import prisma from "@/db";
 import { dietType } from "@/@types/dietType";
 import { dietPreference } from "@/@types/dietPreference";
+import { bodyGoal } from "@/@types/bodyGoal";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -19,8 +20,7 @@ export const appRouter = router({
         age: z.number().int().positive(),
         height: z.number().positive(),
         weight: z.number().positive(),
-        currentBodyFat: z.number().min(0).max(100),
-        targetBodyFat: z.number().min(0).max(100),
+        bodyGoal: bodyGoal,
         daysPerWeek: z.number().int().min(1).max(7),
         workoutType: z.enum(["calisthenics", "weightlifting", "mixed"]),
         hoursPerDay: z.number().positive(),
@@ -39,13 +39,12 @@ export const appRouter = router({
       Age: ${input.age}
       Height: ${input.height} cm
       Weight: ${input.weight} kg
-      Current Body Fat: ${input.currentBodyFat}%
-      Target Body Fat: ${input.targetBodyFat}%
+      Body Goal: I want to ${input.bodyGoal}
       Days per Week: ${input.daysPerWeek}
       Workout Type: ${input.workoutType}
       Hours per Day: ${input.hoursPerDay}
       Goal: ${input.goal}
-      Disabilities: ${input.disabilities || "None"}
+      Disabilities: ${input.disabilities ?? "None"}
 
       Provide a detailed weekly workout plan with specific exercises, sets, reps, and rest periods.`;
 
@@ -165,7 +164,7 @@ export const appRouter = router({
     const workoutPlans = await prisma.workoutPlan.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
-      select: { id: true, createdAt: true },
+      select: { id: true, createdAt: true, height: true, weight: true },
     });
 
     return workoutPlans;

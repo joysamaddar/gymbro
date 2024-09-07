@@ -1,26 +1,41 @@
 import { trpc } from "@/trpc/rsc-client";
-import Link from "next/link";
 
 export async function WorkoutPlanHistory() {
   try {
     const workoutPlans = await trpc.getWorkoutPlanHistory();
-
+    
     if (!workoutPlans || workoutPlans.length === 0) {
       return <div>No workout plans found.</div>;
     }
+
     return (
-      <ul className="space-y-2">
-        {workoutPlans.map((plan) => (
-          <li key={plan.id}>
-            <Link
-              href={`/dashboard/workouts/${plan.id}`}
-              className="text-blue-600 hover:underline"
-            >
-              Workout Plan - {new Date(plan.createdAt).toLocaleDateString()}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div className="overflow-x-auto">
+        <table className="min-w-full">
+          <thead>
+            <tr>
+              <th className="px-4 py-2 text-left">Date</th>
+              <th className="px-4 py-2 text-left">Height</th>
+              <th className="px-4 py-2 text-left">Weight</th>
+            </tr>
+          </thead>
+          <tbody>
+            {workoutPlans.map((plan) => (
+              <tr key={plan.id}>
+                <td className="px-4 py-2">
+                  <a
+                    href={`/dashboard/workouts/${plan.id}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    {new Date(plan.createdAt).toLocaleDateString()}
+                  </a>
+                </td>
+                <td className="px-4 py-2">{plan.height} cm</td>
+                <td className="px-4 py-2">{plan.weight} kg</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     );
   } catch (error) {
     return (

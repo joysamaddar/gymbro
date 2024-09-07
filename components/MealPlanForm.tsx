@@ -53,8 +53,8 @@ const defaultValues: Partial<MealPlanFormValues> = {
   weight: 70,
   currentBodyFat: 20,
   targetBodyFat: 15,
-  dietPreference: "Vegan",
-  dietType: "Balanced",
+  dietPreference: dietPreference.Enum.Vegan,
+  dietType: dietType.Enum.Balanced,
   region: "North America",
 };
 
@@ -108,10 +108,18 @@ export function MealPlanForm() {
                   <SelectValue placeholder="Select your diet preference" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Vegan">Vegan</SelectItem>
-                  <SelectItem value="Vegetarian">Vegetarian</SelectItem>
-                  <SelectItem value="Non-Vegetarian">Non-vegetarian</SelectItem>
-                  <SelectItem value="Paleo">Paleo</SelectItem>
+                  <SelectItem value={dietPreference.Enum.Vegan}>
+                    Vegan
+                  </SelectItem>
+                  <SelectItem value={dietPreference.Enum.Vegetarian}>
+                    Vegetarian
+                  </SelectItem>
+                  <SelectItem value={dietPreference.Enum["Non-Vegetarian"]}>
+                    Non-vegetarian
+                  </SelectItem>
+                  <SelectItem value={dietPreference.Enum.Paleo}>
+                    Paleo
+                  </SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -129,12 +137,20 @@ export function MealPlanForm() {
                   <SelectValue placeholder="Select your diet type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Low Carb">Low Carb</SelectItem>
-                  <SelectItem value="Low Fat">Low Fat</SelectItem>
-                  <SelectItem value="Balanced">Balanced</SelectItem>
-                  <SelectItem value="High Protein">High-Protein</SelectItem>
-                  <SelectItem value="Keto">Keto</SelectItem>
-                  <SelectItem value="Intermittent Fasting">
+                  <SelectItem value={dietType.Enum["Low Carb"]}>
+                    Low Carb
+                  </SelectItem>
+                  <SelectItem value={dietType.Enum["Low Fat"]}>
+                    Low Fat
+                  </SelectItem>
+                  <SelectItem value={dietType.Enum.Balanced}>
+                    Balanced
+                  </SelectItem>
+                  <SelectItem value={dietType.Enum["High Protein"]}>
+                    High-Protein
+                  </SelectItem>
+                  <SelectItem value={dietType.Enum.Keto}>Keto</SelectItem>
+                  <SelectItem value={dietType.Enum["Intermittent Fasting"]}>
                     Intermittent Fasting
                   </SelectItem>
                 </SelectContent>

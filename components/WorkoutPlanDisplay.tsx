@@ -7,8 +7,7 @@ interface WorkoutPlanDisplayProps {
         age: number;
         height: number;
         weight: number;
-        currentBodyFat: number;
-        targetBodyFat: number;
+        bodyGoal: string;
         daysPerWeek: number;
         workoutType: string;
         hoursPerDay: number;
@@ -56,10 +55,7 @@ export function WorkoutPlanDisplay({ plan, error }: WorkoutPlanDisplayProps) {
             <strong>Weight:</strong> {plan.weight} kg
           </p>
           <p>
-            <strong>Current Body Fat:</strong> {plan.currentBodyFat}%
-          </p>
-          <p>
-            <strong>Target Body Fat:</strong> {plan.targetBodyFat}%
+            <strong>Body Goal:</strong> {plan.bodyGoal}
           </p>
         </div>
         <div>

@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  directUrl    = env("DIRECT_URL")
   relationMode = "prisma"
 }
 
@@ -17,23 +17,22 @@ model User {
 }
 
 model WorkoutPlan {
-  id             String   @id @default(cuid())
-  userId         String
-  user           User     @relation(fields: [userId], references: [id])
-  gender         String
-  age            Int
-  height         Float
-  weight         Float
-  currentBodyFat Float
-  targetBodyFat  Float
-  daysPerWeek    Int
-  workoutType    String
-  hoursPerDay    Float
-  goal           String
-  disabilities   String?
-  plan           String   @db.Text
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  gender       String
+  age          Int
+  height       Float
+  weight       Float
+  bodyGoal     String
+  daysPerWeek  Int
+  workoutType  String
+  hoursPerDay  Float
+  goal         String
+  disabilities String?
+  plan         String   @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@index([userId])
 }

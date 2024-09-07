@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { trpc } from "@/trpc/client";
+import { bodyGoal } from "@/@types/bodyGoal";
 
 const workoutFormSchema = z.object({
   gender: z.enum(["male", "female", "other"], {
@@ -35,8 +36,7 @@ const workoutFormSchema = z.object({
   age: z.number().int().positive().min(18).max(100),
   height: z.number().positive().min(100).max(250),
   weight: z.number().positive().min(30).max(300),
-  currentBodyFat: z.number().min(0).max(100),
-  targetBodyFat: z.number().min(0).max(100),
+  bodyGoal: bodyGoal,
   daysPerWeek: z.number().int().min(1).max(7),
   workoutType: z.enum(["calisthenics", "weightlifting", "mixed"]),
   hoursPerDay: z.number().positive().min(0.5).max(4),
@@ -51,8 +51,7 @@ const defaultValues: Partial<WorkoutFormValues> = {
   age: 30,
   height: 170,
   weight: 70,
-  currentBodyFat: 20,
-  targetBodyFat: 15,
+  bodyGoal: bodyGoal.Enum["gain muscle"],
   daysPerWeek: 3,
   workoutType: "mixed",
   hoursPerDay: 1,
@@ -182,34 +181,31 @@ export function WorkoutForm() {
         />
         <FormField
           control={form.control}
-          name="currentBodyFat"
+          name="bodyGoal"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Current Body Fat (%)</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  {...field}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="targetBodyFat"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Target Body Fat (%)</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  {...field}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                />
-              </FormControl>
+              <FormLabel>Body Goal</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select body goal" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value={bodyGoal.Enum["lose fat"]}>
+                    Lose Fat
+                  </SelectItem>
+                  <SelectItem value={bodyGoal.Enum["gain muscle"]}>
+                    Gain Muscle
+                  </SelectItem>
+                  <SelectItem value={bodyGoal.Enum["maintain weight"]}>
+                    Maintain Weight
+                  </SelectItem>
+                  <SelectItem value={bodyGoal.Enum["gain weight"]}>
+                    Gain Weight
+                  </SelectItem>
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
