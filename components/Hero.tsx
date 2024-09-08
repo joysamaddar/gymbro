@@ -27,8 +27,8 @@ export function Hero() {
         </div>
         <div className="lg:w-1/2 relative">
           <Image
-            src="/img/hero-3.png"
-            alt="Person working out"
+            src="/img/hero.png"
+            alt="Hero"
             width={500}
             height={500}
             className="mix-blend-lighten w-auto h-[400px] lg:h-[500px]"

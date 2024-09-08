@@ -15,7 +15,7 @@ export function FAQ() {
         <Accordion type="single" collapsible className="max-w-2xl mx-auto">
           {faqs.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`} className="border-b border-primary/20">
-              <AccordionTrigger className="text-lg font-semibold hover:text-primary transition-colors duration-300">{faq.question}</AccordionTrigger>
+              <AccordionTrigger className="text-lg font-semibold hover:text-primary transition-colors duration-300 text-left">{faq.question}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
             </AccordionItem>
           ))}
