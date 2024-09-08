@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { trpc } from "@/trpc/client";
 import { bodyGoal } from "@/@types/bodyGoal";
+import { workoutType } from "@/@types/workoutType";
 
 const workoutFormSchema = z.object({
   gender: z.enum(["male", "female", "other"], {
@@ -38,7 +39,7 @@ const workoutFormSchema = z.object({
   weight: z.number().positive().min(30).max(300),
   bodyGoal: bodyGoal,
   daysPerWeek: z.number().int().min(1).max(7),
-  workoutType: z.enum(["calisthenics", "weightlifting", "mixed"]),
+  workoutType,
   hoursPerDay: z.number().positive().min(0.5).max(4),
   goal: z.enum(["strength", "aesthetics", "both"]),
   disabilities: z.string().optional(),
@@ -192,18 +193,13 @@ export function WorkoutForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value={bodyGoal.Enum["lose fat"]}>
-                    Lose Fat
-                  </SelectItem>
-                  <SelectItem value={bodyGoal.Enum["gain muscle"]}>
-                    Gain Muscle
-                  </SelectItem>
-                  <SelectItem value={bodyGoal.Enum["maintain weight"]}>
-                    Maintain Weight
-                  </SelectItem>
-                  <SelectItem value={bodyGoal.Enum["gain weight"]}>
-                    Gain Weight
-                  </SelectItem>
+                  {bodyGoal.options.map((goal) => {
+                    return (
+                      <SelectItem key={goal} value={goal}>
+                        <span className="capitalize">{goal}</span>
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -250,9 +246,13 @@ export function WorkoutForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="calisthenics">Calisthenics</SelectItem>
-                  <SelectItem value="weightlifting">Weightlifting</SelectItem>
-                  <SelectItem value="mixed">Mixed</SelectItem>
+                  {workoutType.options.map((type) => {
+                    return (
+                      <SelectItem key={type} value={type}>
+                        <span className="capitalize">{type}</span>
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
               <FormMessage />

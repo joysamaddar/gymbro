@@ -108,18 +108,13 @@ export function MealPlanForm() {
                   <SelectValue placeholder="Select your diet preference" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={dietPreference.Enum.Vegan}>
-                    Vegan
-                  </SelectItem>
-                  <SelectItem value={dietPreference.Enum.Vegetarian}>
-                    Vegetarian
-                  </SelectItem>
-                  <SelectItem value={dietPreference.Enum["Non-Vegetarian"]}>
-                    Non-vegetarian
-                  </SelectItem>
-                  <SelectItem value={dietPreference.Enum.Paleo}>
-                    Paleo
-                  </SelectItem>
+                  {dietPreference.options.map((preference) => {
+                    return (
+                      <SelectItem key={preference} value={preference}>
+                        <span className="capitalize">{preference}</span>
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -137,22 +132,13 @@ export function MealPlanForm() {
                   <SelectValue placeholder="Select your diet type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={dietType.Enum["Low Carb"]}>
-                    Low Carb
-                  </SelectItem>
-                  <SelectItem value={dietType.Enum["Low Fat"]}>
-                    Low Fat
-                  </SelectItem>
-                  <SelectItem value={dietType.Enum.Balanced}>
-                    Balanced
-                  </SelectItem>
-                  <SelectItem value={dietType.Enum["High Protein"]}>
-                    High-Protein
-                  </SelectItem>
-                  <SelectItem value={dietType.Enum.Keto}>Keto</SelectItem>
-                  <SelectItem value={dietType.Enum["Intermittent Fasting"]}>
-                    Intermittent Fasting
-                  </SelectItem>
+                  {dietType.options.map((type) => {
+                    return (
+                      <SelectItem key={type} value={type}>
+                        <span className="capitalize">{type}</span>
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
               <FormMessage />

@@ -7,6 +7,7 @@ import prisma from "@/db";
 import { dietType } from "@/@types/dietType";
 import { dietPreference } from "@/@types/dietPreference";
 import { bodyGoal } from "@/@types/bodyGoal";
+import { workoutType } from "@/@types/workoutType";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -22,7 +23,7 @@ export const appRouter = router({
         weight: z.number().positive(),
         bodyGoal: bodyGoal,
         daysPerWeek: z.number().int().min(1).max(7),
-        workoutType: z.enum(["calisthenics", "weightlifting", "mixed"]),
+        workoutType,
         hoursPerDay: z.number().positive(),
         goal: z.enum(["strength", "aesthetics", "both"]),
         disabilities: z.string().optional(),
