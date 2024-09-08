@@ -1,9 +1,19 @@
+import { Hero } from "@/components/Hero";
+import { Features } from "@/components/Features";
+import { Pricing } from "@/components/Pricing";
+import { FAQ } from "@/components/FAQ";
+import { Testimonials } from "@/components/Testimonials";
+import { Footer } from "@/components/Footer";
+
 export default function Home() {
   return (
-    <main className="flex w-full items-center justify-center h-[90vh]">
-      <h1 className="font-extrabold text-6xl -mt-[5vh]">
-        The best gym bro you can get!
-      </h1>
+    <main className="min-h-screen">
+      <Hero />
+      <Features />
+      <Pricing />
+      <FAQ />
+      <Testimonials />
+      <Footer />
     </main>
   );
 }

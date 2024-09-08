@@ -5,7 +5,7 @@ import GoToDashboard from "./ui/go-to-dashboard";
 
 export default async function Navbar() {
   return (
-    <div className="w-full flex items-center justify-between px-8 h-[10vh]">
+    <div className="w-full flex items-center justify-between px-4 h-[10vh] container mx-auto">
       <h1 className="font-semibold">
         <Link href={"/"}>Gymbro AI</Link>
       </h1>
