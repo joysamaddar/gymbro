@@ -1,38 +1,30 @@
+import { parseDate } from "@/lib/utils";
 import { trpc } from "@/trpc/rsc-client";
+import Link from "next/link";
+import { Badge } from "../ui/badge";
 
 export async function WorkoutPlanHistory() {
   try {
     const workoutPlans = await trpc.getWorkoutPlanHistory();
-    
+
     if (!workoutPlans || workoutPlans.length === 0) {
       return <div>No workout plans found.</div>;
     }
 
     return (
-      <div className="overflow-x-auto">
-        <table className="min-w-full">
-          <thead>
-            <tr>
-              <th className="px-4 py-2 text-left">Date</th>
-              <th className="px-4 py-2 text-left">Height</th>
-            </tr>
-          </thead>
-          <tbody>
-            {workoutPlans.map((plan) => (
-              <tr key={plan.id}>
-                <td className="px-4 py-2">
-                  <a
-                    href={`/dashboard/workouts/${plan.id}`}
-                    className="text-blue-600 hover:underline"
-                  >
-                    {new Date(plan.createdAt).toLocaleDateString()}
-                  </a>
-                </td>
-                <td className="px-4 py-2">{plan.user.height} cm</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="-mx-4">
+        {workoutPlans.map((plan, i) => (
+          <Link
+            key={plan.id}
+            href={`./${plan.id}`}
+            className="p-4 border-y border-border hover:underline inline-block w-full"
+          >
+            <div className="flex justify-between items-center">
+              <p>Workout Plan - {parseDate(plan.createdAt)}</p>
+              {i == 0 && <Badge>Current</Badge>}
+            </div>
+          </Link>
+        ))}
       </div>
     );
   } catch (error) {

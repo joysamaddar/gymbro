@@ -22,3 +22,15 @@ export function parseGender(gender: string | null | undefined) {
   if (gender === "female") return "Female";
   return "Other";
 }
+
+export function parseDate(date: Date | null | undefined) {
+  if (!date) return "Not set";
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+}

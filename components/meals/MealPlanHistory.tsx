@@ -1,27 +1,31 @@
 import Link from "next/link";
 import { trpc } from "@/trpc/rsc-client";
+import { parseDate } from "@/lib/utils";
+import { Badge } from "../ui/badge";
 
 export async function MealPlanHistory() {
   try {
     const mealPlans = await trpc.getMealPlanHistory();
-    
+
     if (!mealPlans || mealPlans.length === 0) {
       return <div>No meal plans found.</div>;
     }
 
     return (
-      <ul className="space-y-2">
-        {mealPlans.map((plan) => (
-          <li key={plan.id}>
-            <Link
-              href={`/dashboard/meals/${plan.id}`}
-              className="text-blue-600 hover:underline"
-            >
-              Meal Plan - {new Date(plan.createdAt).toLocaleDateString()}
-            </Link>
-          </li>
+      <div className="-mx-4">
+        {mealPlans.map((plan, i) => (
+          <Link
+            key={plan.id}
+            href={`./${plan.id}`}
+            className="p-4 border-y border-border hover:underline inline-block w-full"
+          >
+            <div className="flex justify-between items-center">
+              <p>Meal Plan - {parseDate(plan.createdAt)}</p>
+              {i == 0 && <Badge>Current</Badge>}
+            </div>
+          </Link>
         ))}
-      </ul>
+      </div>
     );
   } catch (error) {
     return (

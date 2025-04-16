@@ -13,11 +13,11 @@ export default function DashboardSidebar() {
   const { user, isLoaded } = useUser();
 
   return (
-    <aside className="sticky top-0 h-screen bg-background border-r border-r-border rounded-md sm:px-4 py-4 sm:py-8 w-[14%] sm:w-[25%] lg:w-[17%] flex flex-col justify-between items-center sm:items-stretch">
-      <div className="h-[10vh] hidden sm:flex items-center justify-center -mt-8 px-4 font-semibold">
-        <Link href={"/"}>Gymbro AI</Link>
-      </div>
+    <aside className="sticky top-0 h-screen bg-background border-r border-r-border rounded-md sm:px-4 py-4 w-[14%] sm:w-[25%] lg:w-[17%] flex flex-col justify-between items-center sm:items-stretch">
       <div className="flex flex-col gap-2">
+        <div className="hidden sm:flex items-center justify-center p-4 font-semibold">
+          <Link href={"/"}>Gymbro AI</Link>
+        </div>
         <Link href={"/dashboard"}>
           <Button
             variant="ghost"

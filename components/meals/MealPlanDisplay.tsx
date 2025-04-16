@@ -5,11 +5,11 @@ interface MealPlanDisplayProps {
   plan?:
     | {
         user: {
-          gender: string;
-          age: number;
-          height: number;
-          allergies: string | null;
+          gender: string | null;
+          age: number | null;
+          height: number | null;
         };
+        allergies: string | null;
         dietType: string;
         region: string;
         id: string;
@@ -53,7 +53,7 @@ export function MealPlanDisplay({ plan, error }: MealPlanDisplayProps) {
         </div>
         <div>
           <p>
-            <strong>Allergies:</strong> {plan.user.allergies || "None"}
+            <strong>Allergies:</strong> {plan.allergies || "None"}
           </p>
           <p>
             <strong>Diet Type:</strong> {plan.dietType}
