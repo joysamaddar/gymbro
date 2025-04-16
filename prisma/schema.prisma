@@ -12,27 +12,37 @@ datasource db {
 model User {
   id           String        @id @default(cuid())
   clerkId      String        @unique
+  gender       String?
+  age          Int?
+  height       Float?
+  disabilities String?
+  weightStats  WeightStats[]
   workoutPlans WorkoutPlan[]
   mealPlans    MealPlan[]
 }
 
+model WeightStats {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [clerkId])
+  weight    Float
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
 model WorkoutPlan {
-  id           String   @id @default(cuid())
-  userId       String
-  user         User     @relation(fields: [userId], references: [id])
-  gender       String
-  age          Int
-  height       Float
-  weight       Float
-  bodyGoal     String
-  daysPerWeek  Int
-  workoutType  String
-  hoursPerDay  Float
-  goal         String
-  disabilities String?
-  plan         String   @db.Text
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [clerkId])
+  bodyGoal    String
+  daysPerWeek Int
+  workoutType String
+  hoursPerDay Float
+  goal        String
+  plan        String   @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([userId])
 }
@@ -40,17 +50,11 @@ model WorkoutPlan {
 model MealPlan {
   id             String   @id @default(cuid())
   userId         String
-  user           User     @relation(fields: [userId], references: [id])
-  gender         String
-  age            Int
-  height         Float
-  weight         Float
-  currentBodyFat Float
-  targetBodyFat  Float
-  allergies      String?
+  user           User     @relation(fields: [userId], references: [clerkId])
   dietPreference String
   dietType       String
   region         String
+  allergies      String?
   plan           String   @db.Text
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt

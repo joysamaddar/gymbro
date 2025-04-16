@@ -1,4 +1,4 @@
-import Heading from "@/components/Heading";
+import Heading from "@/components/common/Heading";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -37,9 +37,9 @@ export default function Dashboard() {
   return (
     <div className="px-4 py-8 flex flex-col gap-8">
       <Heading title="Home" />
-      <div className="flex gap-8 flex-wrap justify-center">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {dashboardCardItems.map((item, i) => (
-          <Card className="w-[350px] flex flex-col" key={i}>
+          <Card className="flex flex-col" key={i}>
             <CardHeader>
               <CardTitle>{item.title}</CardTitle>
               <CardDescription>{item.description}</CardDescription>

@@ -1,18 +1,20 @@
+import { parseGender } from "@/lib/utils";
 import React from "react";
 
 interface WorkoutPlanDisplayProps {
   plan?:
     | {
-        gender: string;
-        age: number;
-        height: number;
-        weight: number;
+        user: {
+          gender: string | null;
+          age: number | null;
+          height: number | null;
+          disabilities: string | null;
+        };
         bodyGoal: string;
         daysPerWeek: number;
         workoutType: string;
         hoursPerDay: number;
         goal: string;
-        disabilities: string | null;
         plan: string;
         createdAt: Date;
         updatedAt: Date;
@@ -43,17 +45,17 @@ export function WorkoutPlanDisplay({ plan, error }: WorkoutPlanDisplayProps) {
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div>
           <p>
-            <strong>Gender:</strong> {plan.gender}
+            <strong>Gender:</strong> {parseGender(plan.user.gender)}
           </p>
           <p>
-            <strong>Age:</strong> {plan.age}
+            <strong>Age:</strong> {plan.user.age}
           </p>
           <p>
-            <strong>Height:</strong> {plan.height} cm
+            <strong>Height:</strong> {plan.user.height} cm
           </p>
-          <p>
-            <strong>Weight:</strong> {plan.weight} kg
-          </p>
+          {/* <p>
+            <strong>Weight:</strong> {plan.user.weight} kg
+          </p> */}
           <p>
             <strong>Body Goal:</strong> {plan.bodyGoal}
           </p>
@@ -72,7 +74,7 @@ export function WorkoutPlanDisplay({ plan, error }: WorkoutPlanDisplayProps) {
             <strong>Goal:</strong> {plan.goal}
           </p>
           <p>
-            <strong>Disabilities:</strong> {plan.disabilities || "None"}
+            <strong>Disabilities:</strong> {plan.user.disabilities || "None"}
           </p>
           <p>
             <strong>Created At:</strong>{" "}

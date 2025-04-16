@@ -1,5 +1,5 @@
+import DashboardSidebar from "@/components/common/DashboardSidebar";
 import type { Metadata } from "next";
-import DashboardSidebar from "@/components/DashboardSidebar";
 
 export const metadata: Metadata = {
   title: "Dashboard",

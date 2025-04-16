@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -31,27 +31,16 @@ import { bodyGoal } from "@/@types/bodyGoal";
 import { workoutType } from "@/@types/workoutType";
 
 const workoutFormSchema = z.object({
-  gender: z.enum(["male", "female", "other"], {
-    required_error: "Please select a gender.",
-  }),
-  age: z.number().int().positive().min(18).max(100),
-  height: z.number().positive().min(100).max(250),
-  weight: z.number().positive().min(30).max(300),
   bodyGoal: bodyGoal,
   daysPerWeek: z.number().int().min(1).max(7),
   workoutType,
   hoursPerDay: z.number().positive().min(0.5).max(4),
   goal: z.enum(["strength", "aesthetics", "both"]),
-  disabilities: z.string().optional(),
 });
 
 type WorkoutFormValues = z.infer<typeof workoutFormSchema>;
 
 const defaultValues: Partial<WorkoutFormValues> = {
-  gender: "male",
-  age: 30,
-  height: 170,
-  weight: 70,
   bodyGoal: bodyGoal.Enum["gain muscle"],
   daysPerWeek: 3,
   workoutType: "mixed",
@@ -93,93 +82,6 @@ export function WorkoutForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="gender"
-          render={({ field }) => (
-            <FormItem className="space-y-3">
-              <FormLabel>Gender</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className="flex flex-col space-y-1"
-                >
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="male" />
-                    </FormControl>
-                    <FormLabel className="font-normal">Male</FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="female" />
-                    </FormControl>
-                    <FormLabel className="font-normal">Female</FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="other" />
-                    </FormControl>
-                    <FormLabel className="font-normal">Other</FormLabel>
-                  </FormItem>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="age"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Age</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  {...field}
-                  onChange={(e) => field.onChange(parseInt(e.target.value))}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="height"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Height (cm)</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  {...field}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="weight"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Weight (kg)</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  {...field}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="bodyGoal"
@@ -295,23 +197,6 @@ export function WorkoutForm() {
                   <SelectItem value="both">Both</SelectItem>
                 </SelectContent>
               </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="disabilities"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Disabilities (optional)</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription>
-                Please list any disabilities or physical limitations that may
-                affect your workout plan.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

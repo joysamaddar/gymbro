@@ -1,5 +1,5 @@
-import Heading from "@/components/Heading";
-import { MealPlanHistory } from "@/components/MealPlanHistory";
+import Heading from "@/components/common/Heading";
+import { MealPlanHistory } from "@/components/meals/MealPlanHistory";
 
 export default function Meals() {
   return (

@@ -1,7 +1,7 @@
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import GoToDashboard from "./ui/go-to-dashboard";
+import { Button } from "@/components/ui/button";
+import GoToDashboard from "@/components/ui/go-to-dashboard";
 
 export default async function Navbar() {
   return (

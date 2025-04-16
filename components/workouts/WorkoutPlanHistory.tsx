@@ -15,7 +15,6 @@ export async function WorkoutPlanHistory() {
             <tr>
               <th className="px-4 py-2 text-left">Date</th>
               <th className="px-4 py-2 text-left">Height</th>
-              <th className="px-4 py-2 text-left">Weight</th>
             </tr>
           </thead>
           <tbody>
@@ -29,8 +28,7 @@ export async function WorkoutPlanHistory() {
                     {new Date(plan.createdAt).toLocaleDateString()}
                   </a>
                 </td>
-                <td className="px-4 py-2">{plan.height} cm</td>
-                <td className="px-4 py-2">{plan.weight} kg</td>
+                <td className="px-4 py-2">{plan.user.height} cm</td>
               </tr>
             ))}
           </tbody>

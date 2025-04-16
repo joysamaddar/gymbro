@@ -15,3 +15,10 @@ export function getBaseUrl() {
 
   return `http://localhost:${process.env.PORT ?? 3000}`;
 }
+
+export function parseGender(gender: string | null | undefined) {
+  if (!gender) return "Not set";
+  if (gender === "male") return "Male";
+  if (gender === "female") return "Female";
+  return "Other";
+}

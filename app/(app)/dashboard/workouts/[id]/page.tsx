@@ -1,5 +1,5 @@
-import { WorkoutPlanDisplay } from "@/components/WorkoutPlanDisplay";
-import Heading from "@/components/Heading";
+import { WorkoutPlanDisplay } from "@/components/workouts/WorkoutPlanDisplay";
+import Heading from "@/components/common/Heading";
 import { trpc } from "@/trpc/rsc-client";
 
 export default async function WorkoutPlanPage({

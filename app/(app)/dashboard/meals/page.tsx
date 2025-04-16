@@ -1,5 +1,5 @@
-import Heading from "@/components/Heading";
-import { MealPlanForm } from "@/components/MealPlanForm";
+import Heading from "@/components/common/Heading";
+import { MealPlanForm } from "@/components/meals/MealPlanForm";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 

@@ -1,5 +1,5 @@
-import Heading from "@/components/Heading";
-import { MealPlanDisplay } from "@/components/MealPlanDisplay";
+import Heading from "@/components/common/Heading";
+import { MealPlanDisplay } from "@/components/meals/MealPlanDisplay";
 import { trpc } from "@/trpc/rsc-client";
 
 export default async function MealPlanPage({

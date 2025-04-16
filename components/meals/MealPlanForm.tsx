@@ -30,29 +30,15 @@ import { dietType } from "@/@types/dietType";
 import { dietPreference } from "@/@types/dietPreference";
 
 const mealPlanFormSchema = z.object({
-  gender: z.enum(["male", "female", "other"], {
-    required_error: "Please select a gender.",
-  }),
-  age: z.number().int().positive().min(18).max(100),
-  height: z.number().positive().min(100).max(250),
-  weight: z.number().positive().min(30).max(300),
-  currentBodyFat: z.number().min(0).max(100),
-  targetBodyFat: z.number().min(0).max(100),
-  allergies: z.string().optional(),
   dietPreference,
   dietType: dietType,
   region: z.string(),
+  allergies: z.string().optional(),
 });
 
 type MealPlanFormValues = z.infer<typeof mealPlanFormSchema>;
 
 const defaultValues: Partial<MealPlanFormValues> = {
-  gender: "male",
-  age: 30,
-  height: 170,
-  weight: 70,
-  currentBodyFat: 20,
-  targetBodyFat: 15,
   dietPreference: dietPreference.Enum.Vegan,
   dietType: dietType.Enum.Balanced,
   region: "North America",
@@ -91,12 +77,6 @@ export function MealPlanForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* Gender field (same as WorkoutForm) */}
-        {/* Age field (same as WorkoutForm) */}
-        {/* Height field (same as WorkoutForm) */}
-        {/* Weight field (same as WorkoutForm) */}
-        {/* Current Body Fat field (same as WorkoutForm) */}
-        {/* Target Body Fat field (same as WorkoutForm) */}
         <FormField
           control={form.control}
           name="dietPreference"

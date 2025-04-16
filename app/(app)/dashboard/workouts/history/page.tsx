@@ -1,5 +1,5 @@
-import Heading from "@/components/Heading";
-import { WorkoutPlanHistory } from "@/components/WorkoutPlanHistory";
+import Heading from "@/components/common/Heading";
+import { WorkoutPlanHistory } from "@/components/workouts/WorkoutPlanHistory";
 
 export default function Workouts() {
   return (

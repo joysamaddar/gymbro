@@ -1,16 +1,15 @@
+import { parseGender } from "@/lib/utils";
 import React from "react";
-import { Loader2 } from "lucide-react";
 
 interface MealPlanDisplayProps {
   plan?:
     | {
-        gender: string;
-        age: number;
-        height: number;
-        weight: number;
-        currentBodyFat: number;
-        targetBodyFat: number;
-        allergies: string | null;
+        user: {
+          gender: string;
+          age: number;
+          height: number;
+          allergies: string | null;
+        };
         dietType: string;
         region: string;
         id: string;
@@ -43,27 +42,18 @@ export function MealPlanDisplay({ plan, error }: MealPlanDisplayProps) {
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div>
           <p>
-            <strong>Gender:</strong> {plan.gender}
+            <strong>Gender:</strong> {parseGender(plan.user.gender)}
           </p>
           <p>
-            <strong>Age:</strong> {plan.age}
+            <strong>Age:</strong> {plan.user.age}
           </p>
           <p>
-            <strong>Height:</strong> {plan.height} cm
-          </p>
-          <p>
-            <strong>Weight:</strong> {plan.weight} kg
-          </p>
-          <p>
-            <strong>Current Body Fat:</strong> {plan.currentBodyFat}%
-          </p>
-          <p>
-            <strong>Target Body Fat:</strong> {plan.targetBodyFat}%
+            <strong>Height:</strong> {plan.user.height} cm
           </p>
         </div>
         <div>
           <p>
-            <strong>Allergies:</strong> {plan.allergies || "None"}
+            <strong>Allergies:</strong> {plan.user.allergies || "None"}
           </p>
           <p>
             <strong>Diet Type:</strong> {plan.dietType}

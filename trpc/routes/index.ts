@@ -14,18 +14,25 @@ const openai = new OpenAI({
 });
 
 export const appRouter = router({
-  generateWorkoutPlan: procedure
+  getProfile: procedure.query(async ({}) => {
+    const { userId } = auth();
+    if (!userId) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+
+    const profile = await prisma.user.findUnique({
+      where: { clerkId: userId },
+    });
+
+    return profile;
+  }),
+
+  updateProfile: procedure
     .input(
       z.object({
-        gender: z.enum(["male", "female", "other"]),
-        age: z.number().int().positive(),
-        height: z.number().positive(),
-        weight: z.number().positive(),
-        bodyGoal: bodyGoal,
-        daysPerWeek: z.number().int().min(1).max(7),
-        workoutType,
-        hoursPerDay: z.number().positive(),
-        goal: z.enum(["strength", "aesthetics", "both"]),
+        gender: z.enum(["male", "female", "other"]).optional(),
+        age: z.number().positive().optional(),
+        height: z.number().positive().optional(),
         disabilities: z.string().optional(),
       })
     )
@@ -35,17 +42,84 @@ export const appRouter = router({
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
 
+      const updatedProfile = await prisma.user.update({
+        where: { clerkId: userId },
+        data: {
+          ...input,
+        },
+      });
+
+      return updatedProfile;
+    }),
+
+  updateWeightStats: procedure
+    .input(z.object({ weight: z.number().positive() }))
+    .mutation(async ({ input }) => {
+      const { userId } = auth();
+      if (!userId) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      const weightStats = await prisma.weightStats.create({
+        data: {
+          userId,
+          weight: input.weight,
+        },
+      });
+
+      return weightStats;
+    }),
+
+  generateWorkoutPlan: procedure
+    .input(
+      z.object({
+        bodyGoal: bodyGoal,
+        daysPerWeek: z.number().int().min(1).max(7),
+        workoutType,
+        hoursPerDay: z.number().positive(),
+        goal: z.enum(["strength", "aesthetics", "both"]),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { userId } = auth();
+      if (!userId) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      const profile = await prisma.user.findUnique({
+        where: { clerkId: userId },
+        select: {
+          gender: true,
+          age: true,
+          height: true,
+          disabilities: true,
+        },
+      });
+
+      if (!profile) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No profile found",
+        });
+      }
+
+      if (!profile.gender || !profile.age || !profile.height) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Please update your profile to generate a workout plan",
+        });
+      }
+
       const prompt = `Generate a personalized workout plan based on the following parameters:
-      Gender: ${input.gender}
-      Age: ${input.age}
-      Height: ${input.height} cm
-      Weight: ${input.weight} kg
+      Gender: ${profile.gender}
+      Age: ${profile.age}
+      Height: ${profile.height} cm
       Body Goal: I want to ${input.bodyGoal}
-      Days per Week: ${input.daysPerWeek}
+      Workout days per Week: ${input.daysPerWeek}
       Workout Type: ${input.workoutType}
-      Hours per Day: ${input.hoursPerDay}
-      Goal: ${input.goal}
-      Disabilities: ${input.disabilities ?? "None"}
+      Workout Hours per Day: ${input.hoursPerDay}
+      Goal (Aesthetics, Strength, Both): ${input.goal}
+      Disabilities: ${profile.disabilities ?? "None"}
 
       Provide a detailed weekly workout plan with specific exercises, sets, reps, and rest periods.`;
 
@@ -77,16 +151,10 @@ export const appRouter = router({
   generateMealPlan: procedure
     .input(
       z.object({
-        gender: z.enum(["male", "female", "other"]),
-        age: z.number().int().positive(),
-        height: z.number().positive(),
-        weight: z.number().positive(),
-        currentBodyFat: z.number().min(0).max(100),
-        targetBodyFat: z.number().min(0).max(100),
-        allergies: z.string().optional(),
         dietPreference,
         dietType,
         region: z.string(),
+        allergies: z.string().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -95,17 +163,37 @@ export const appRouter = router({
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
 
+      const profile = await prisma.user.findUnique({
+        where: { clerkId: userId },
+        select: {
+          gender: true,
+          age: true,
+          height: true,
+        },
+      });
+
+      if (!profile) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No profile found",
+        });
+      }
+
+      if (!profile.gender || !profile.age || !profile.height) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Please update your profile to generate a workout plan",
+        });
+      }
+
       const prompt = `Generate a personalized meal plan based on the following parameters:
-      Gender: ${input.gender}
-      Age: ${input.age}
-      Height: ${input.height} cm
-      Weight: ${input.weight} kg
-      Current Body Fat: ${input.currentBodyFat}%
-      Target Body Fat: ${input.targetBodyFat}%
-      Allergies: ${input.allergies || "None"}
+      Gender: ${profile.gender}
+      Age: ${profile.age}
+      Height: ${profile.height} cm
       Diet Preference: ${input.dietPreference}
       Diet Type: ${input.dietType}
       Region: ${input.region}
+      Allergies: ${input.allergies || "None"}
 
       Provide a detailed weekly meal plan with specific meals, recipes, and nutritional information.`;
 
@@ -144,6 +232,9 @@ export const appRouter = router({
 
       const workoutPlan = await prisma.workoutPlan.findUnique({
         where: { id: input.id },
+        include: {
+          user: true,
+        },
       });
 
       if (!workoutPlan || workoutPlan.userId !== userId) {
@@ -165,7 +256,7 @@ export const appRouter = router({
     const workoutPlans = await prisma.workoutPlan.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
-      select: { id: true, createdAt: true, height: true, weight: true },
+      select: { id: true, createdAt: true, user: true },
     });
 
     return workoutPlans;
@@ -181,6 +272,9 @@ export const appRouter = router({
 
       const mealPlan = await prisma.mealPlan.findUnique({
         where: { id: input.id },
+        include: {
+          user: true,
+        },
       });
 
       if (!mealPlan || mealPlan.userId !== userId) {
@@ -193,7 +287,7 @@ export const appRouter = router({
       return mealPlan;
     }),
 
-  getMealPlanHistory: procedure.query(async ({ ctx }) => {
+  getMealPlanHistory: procedure.query(async () => {
     const { userId } = auth();
     if (!userId) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
@@ -202,7 +296,11 @@ export const appRouter = router({
     const mealPlans = await prisma.mealPlan.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
-      select: { id: true, createdAt: true },
+      select: {
+        id: true,
+        createdAt: true,
+        user: true,
+      },
     });
 
     return mealPlans;

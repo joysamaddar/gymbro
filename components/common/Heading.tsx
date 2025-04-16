@@ -14,7 +14,7 @@ export default function Heading({
   return (
     <div
       className={cn(
-        "h-[10vh] -mt-8 -mx-4 flex items-center justify-between px-4 border-b border-b-zinc-900",
+        "h-[10vh] -mt-8 -mx-4 flex items-center justify-between px-4 border-b border-b-border",
         className
       )}
       {...props}
