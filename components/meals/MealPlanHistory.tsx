@@ -8,7 +8,7 @@ export async function MealPlanHistory() {
     const mealPlans = await trpc.getMealPlanHistory();
 
     if (!mealPlans || mealPlans.length === 0) {
-      return <div>No meal plans found.</div>;
+      return <div className="p-4">No meal plans found.</div>;
     }
 
     return (
@@ -20,7 +20,9 @@ export async function MealPlanHistory() {
             className="p-4 border-y border-border hover:underline inline-block w-full"
           >
             <div className="flex justify-between items-center">
-              <p>Meal Plan - {parseDate(plan.createdAt)}</p>
+              <p>
+                Meal Plan - {parseDate(plan.createdAt, { includeTime: true })}
+              </p>
               {i == 0 && <Badge>Current</Badge>}
             </div>
           </Link>

@@ -19,7 +19,7 @@ export default function Heading({
       )}
       {...props}
     >
-      <h2 className="md:text-xl font-semibold tracking-wide">{title}</h2>
+      <h2 className="text-xl md:text-2xl font-semibold tracking-wide">{title}</h2>
       {children}
     </div>
   );

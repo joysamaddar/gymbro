@@ -38,7 +38,7 @@ export function MealPlanDisplay({ plan, error }: MealPlanDisplayProps) {
 
   return (
     <div className="p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Your Personalized Meal Plan</h2>
+      <h2 className="text-xl md:text-2xl font-bold mb-4">Your Personalized Meal Plan</h2>
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div>
           <p>
@@ -67,7 +67,7 @@ export function MealPlanDisplay({ plan, error }: MealPlanDisplayProps) {
           </p>
         </div>
       </div>
-      <h3 className="text-xl font-semibold mb-2">Meal Plan</h3>
+      <h3 className="text-lg md:text-xl font-semibold mb-2">Meal Plan</h3>
       <div className="whitespace-pre-wrap p-4 rounded-md">{plan.plan}</div>
     </div>
   );

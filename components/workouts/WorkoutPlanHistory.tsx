@@ -8,7 +8,7 @@ export async function WorkoutPlanHistory() {
     const workoutPlans = await trpc.getWorkoutPlanHistory();
 
     if (!workoutPlans || workoutPlans.length === 0) {
-      return <div>No workout plans found.</div>;
+      return <div className="p-4">No workout plans found.</div>;
     }
 
     return (
@@ -20,7 +20,10 @@ export async function WorkoutPlanHistory() {
             className="p-4 border-y border-border hover:underline inline-block w-full"
           >
             <div className="flex justify-between items-center">
-              <p>Workout Plan - {parseDate(plan.createdAt)}</p>
+              <p>
+                Workout Plan -{" "}
+                {parseDate(plan.createdAt, { includeTime: true })}
+              </p>
               {i == 0 && <Badge>Current</Badge>}
             </div>
           </Link>

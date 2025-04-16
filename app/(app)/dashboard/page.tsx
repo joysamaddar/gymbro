@@ -1,4 +1,5 @@
 import Heading from "@/components/common/Heading";
+import LatestPlans from "@/components/profile/LatestPlans";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -33,13 +34,17 @@ const dashboardCardItems = [
   },
 ];
 
-export default function Dashboard() {
+export default async function Dashboard() {
   return (
-    <div className="px-4 py-8 flex flex-col gap-8">
-      <Heading title="Home" />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className="flex flex-col">
+      <div className="px-4 pt-8">
+        <Heading title="Home" />
+      </div>
+
+      <LatestPlans />
+      <div className="grid grid-cols-1 lg:grid-cols-2">
         {dashboardCardItems.map((item, i) => (
-          <Card className="flex flex-col" key={i}>
+          <Card className="flex flex-col rounded-none" key={i}>
             <CardHeader>
               <CardTitle>{item.title}</CardTitle>
               <CardDescription>{item.description}</CardDescription>

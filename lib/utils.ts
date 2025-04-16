@@ -23,14 +23,21 @@ export function parseGender(gender: string | null | undefined) {
   return "Other";
 }
 
-export function parseDate(date: Date | null | undefined) {
+export function parseDate(
+  date: Date | null | undefined,
+  options?: {
+    includeTime?: boolean;
+  }
+) {
   if (!date) return "Not set";
   return date.toLocaleString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
+    ...(options?.includeTime && {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    }),
   });
 }
