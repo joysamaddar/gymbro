@@ -1,5 +1,6 @@
 import Heading from "@/components/common/Heading";
 import LatestPlans from "@/components/profile/LatestPlans";
+import { WeightTracker } from "@/components/profile/WeightTracker";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -40,7 +41,7 @@ export default async function Dashboard() {
       <div className="px-4 pt-8">
         <Heading title="Home" />
       </div>
-
+      <WeightTracker />
       <LatestPlans />
       <div className="grid grid-cols-1 lg:grid-cols-2">
         {dashboardCardItems.map((item, i) => (

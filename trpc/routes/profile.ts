@@ -41,12 +41,49 @@ export const profileRouter = {
 
       return updatedProfile;
     }),
+  getWeightStats: procedure.query(async () => {
+    const { userId } = auth();
+
+    if (!userId) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+
+    const weightStats = await prisma.weightStats.findMany({
+      where: { userId },
+      orderBy: { createdAt: "asc" },
+    });
+
+    return weightStats;
+  }),
   updateWeightStats: procedure
     .input(z.object({ weight: z.number().positive() }))
     .mutation(async ({ input }) => {
+      if (input.weight < 0 || input.weight > 500) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Weight must be between 0 and 500 kg.",
+        });
+      }
+
       const { userId } = auth();
       if (!userId) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      const existingWeightStats = await prisma.weightStats.findFirst({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+      });
+
+      if (
+        existingWeightStats &&
+        existingWeightStats.createdAt.toDateString() ===
+          new Date().toDateString()
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You can only update your weight once per day.",
+        });
       }
 
       const weightStats = await prisma.weightStats.create({
