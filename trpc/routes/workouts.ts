@@ -52,10 +52,23 @@ export const workoutsRouter = {
         });
       }
 
+      const latestWeight = await prisma.weightStats.findFirst({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+      });
+
+      if (!latestWeight) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Please log your current weight first",
+        });
+      }
+
       const prompt = `Generate a personalized workout plan based on the following parameters:
     Gender: ${profile.gender}
     Age: ${profile.age}
     Height: ${profile.height} cm
+    Weight: ${latestWeight.weight} kg
     Body Goal: I want to ${input.bodyGoal}
     Workout days per Week: ${input.daysPerWeek}
     Workout Type: ${input.workoutType}

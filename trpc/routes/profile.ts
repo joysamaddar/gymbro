@@ -70,14 +70,14 @@ export const profileRouter = {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
 
-      const existingWeightStats = await prisma.weightStats.findFirst({
+      const latestWeight = await prisma.weightStats.findFirst({
         where: { userId },
         orderBy: { createdAt: "desc" },
       });
 
       if (
-        existingWeightStats &&
-        existingWeightStats.createdAt.toDateString() ===
+        latestWeight &&
+        latestWeight.createdAt.toDateString() ===
           new Date().toDateString()
       ) {
         throw new TRPCError({

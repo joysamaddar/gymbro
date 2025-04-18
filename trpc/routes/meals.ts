@@ -50,10 +50,23 @@ export const mealsRouter = {
         });
       }
 
+      const latestWeight = await prisma.weightStats.findFirst({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+      });
+
+      if (!latestWeight) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Please log your current weight first",
+        });
+      }
+
       const prompt = `Generate a personalized meal plan based on the following parameters:
       Gender: ${profile.gender}
       Age: ${profile.age}
       Height: ${profile.height} cm
+      Weight: ${latestWeight.weight} kg
       Diet Preference: ${input.dietPreference}
       Diet Type: ${input.dietType}
       Region: ${input.region}
