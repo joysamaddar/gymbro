@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface WeightStat {
   id: string;
@@ -28,12 +29,14 @@ interface WeightStat {
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-background border border-border rounded-md p-2 shadow-sm">
-        <p className="text-sm font-medium">{payload[0].payload.date}</p>
-        <p className="text-sm text-muted-foreground">
-          {payload[0].payload.weight} kg
-        </p>
-      </div>
+      <Card>
+        <CardContent className="p-2">
+          <p className="text-sm font-medium">{payload[0].payload.date}</p>
+          <p className="text-sm text-muted-foreground">
+            {payload[0].payload.weight} kg
+          </p>
+        </CardContent>
+      </Card>
     );
   }
   return null;
@@ -80,7 +83,7 @@ export function WeightTracker() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3">
-      <div className="h-[300px] col-span-2 mt-8">
+      <div className="h-[300px] col-span-2 [&_.recharts-tooltip-cursor]:hidden">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={
@@ -91,7 +94,7 @@ export function WeightTracker() {
                   }))
                 : []
             }
-            margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+            margin={{ top: 32, right: 0, left: 0, bottom: 0 }}
           >
             <defs>
               <linearGradient id="colorWeight" x1="0" y1="0" x2="0" y2="1">
