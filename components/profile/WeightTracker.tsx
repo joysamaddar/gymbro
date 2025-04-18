@@ -116,6 +116,10 @@ export function WeightTracker() {
               dataKey="weight"
               stroke="hsl(var(--primary))"
               fill="url(#colorWeight)"
+              activeDot={{
+                fill: "hsl(var(--primary))",
+                stroke: "hsl(var(--background))",
+              }}
               strokeWidth={2}
             />
           </AreaChart>
