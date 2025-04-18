@@ -34,15 +34,20 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>;
 export function ProfileForm({
   profile,
 }: {
-  profile: {
-    id: string;
-    clerkId: string;
-    gender: string | null;
-    age: number | null;
-    height: number | null;
-    disabilities: string | null;
-  } | null | undefined;
+  profile:
+    | {
+        id: string;
+        clerkId: string;
+        gender: string | null;
+        age: number | null;
+        height: number | null;
+        disabilities: string | null;
+      }
+    | null
+    | undefined;
 }) {
+  const utils = trpc.useUtils();
+
   const defaultValues: Partial<ProfileFormValues> = {
     gender: profile?.gender as "male" | "female" | "other",
     age: profile?.age ?? undefined,
@@ -62,7 +67,7 @@ export function ProfileForm({
         title: "Profile Updated",
         description: "Your profile has been updated successfully.",
       });
-      router.refresh();
+      utils.getProfile.invalidate();
       router.push(`/dashboard/profile`);
     },
     onError: (error) => {
