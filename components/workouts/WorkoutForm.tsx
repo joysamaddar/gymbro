@@ -47,6 +47,7 @@ const defaultValues: Partial<WorkoutFormValues> = {
 };
 
 export function WorkoutForm() {
+  const utils = trpc.useUtils();
   const router = useRouter();
   const form = useForm<WorkoutFormValues>({
     resolver: zodResolver(workoutFormSchema),
@@ -60,6 +61,7 @@ export function WorkoutForm() {
         description:
           "Your personalized workout plan has been created successfully.",
       });
+      utils.getLatestWorkoutPlan.invalidate();
       router.push(`/dashboard/workouts/${data.id}`);
     },
     onError: (error) => {
