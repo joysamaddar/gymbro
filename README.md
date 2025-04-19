@@ -20,7 +20,7 @@ GymBro is a modern web application that helps users create personalized workout 
 - **Payments:** Stripe
 - **AI:** OpenAI GPT-3.5
 - **Styling:** Tailwind CSS with shadcn/ui
-- **State Management:** tRPC
+- **API Layer:** tRPC for end-to-end type safety
 - **Deployment:** Vercel (recommended)
 
 ## Getting Started
@@ -36,7 +36,7 @@ GymBro is a modern web application that helps users create personalized workout 
 
 ### Environment Variables
 
-Create a `.env` file in the root directory (refer to .env.example)
+Create a `.env` file in the root directory (refer to `.env.example`)
 
 ### Installation
 
