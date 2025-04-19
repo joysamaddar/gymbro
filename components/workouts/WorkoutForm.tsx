@@ -61,6 +61,7 @@ export function WorkoutForm() {
         description:
           "Your personalized workout plan has been created successfully.",
       });
+      utils.getUserCredit.invalidate();
       utils.getLatestWorkoutPlan.invalidate();
       router.push(`/dashboard/workouts/${data.id}`);
     },

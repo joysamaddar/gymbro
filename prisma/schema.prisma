@@ -16,6 +16,7 @@ model User {
   age          Int?
   height       Float?
   disabilities String?
+  credits      Int           @default(2)
   weightStats  WeightStats[]
   workoutPlans WorkoutPlan[]
   mealPlans    MealPlan[]

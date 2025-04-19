@@ -59,6 +59,7 @@ export function MealPlanForm() {
         description:
           "Your personalized meal plan has been created successfully.",
       });
+      utils.getUserCredit.invalidate();
       utils.getLatestMealPlan.invalidate();
       router.push(`/dashboard/meals/${data.id}`);
     },

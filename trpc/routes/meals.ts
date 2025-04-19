@@ -1,7 +1,7 @@
 import { procedure } from "../trpc";
 import { auth } from "@clerk/nextjs";
 import { TRPCError } from "@trpc/server";
-import prisma from "@/db";
+import prisma from "@/lib/prisma";
 import { z } from "zod";
 import OpenAI from "openai";
 import { dietPreference } from "@/@types/dietPreference";
@@ -27,23 +27,31 @@ export const mealsRouter = {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
 
-      const profile = await prisma.user.findUnique({
+      const user = await prisma.user.findUnique({
         where: { clerkId: userId },
         select: {
           gender: true,
           age: true,
           height: true,
+          credits: true,
         },
       });
 
-      if (!profile) {
+      if (!user) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "No profile found",
         });
       }
 
-      if (!profile.gender || !profile.age || !profile.height) {
+      if (user.credits < 1) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Insufficient credits. Please purchase more credits to generate a meal plan.",
+        });
+      }
+
+      if (!user.gender || !user.age || !user.height) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Please update your profile to generate a workout plan",
@@ -63,9 +71,9 @@ export const mealsRouter = {
       }
 
       const prompt = `Generate a personalized meal plan based on the following parameters:
-      Gender: ${profile.gender}
-      Age: ${profile.age}
-      Height: ${profile.height} cm
+      Gender: ${user.gender}
+      Age: ${user.age}
+      Height: ${user.height} cm
       Weight: ${latestWeight.weight} kg
       Diet Preference: ${input.dietPreference}
       Diet Type: ${input.dietType}
@@ -88,12 +96,26 @@ export const mealsRouter = {
         });
       }
 
-      const mealPlan = await prisma.mealPlan.create({
-        data: {
-          userId,
-          ...input,
-          plan,
-        },
+      // Start a transaction to create the meal plan and deduct credits
+      const mealPlan = await prisma.$transaction(async (tx) => {
+        // Deduct credits
+        await tx.user.update({
+          where: { clerkId: userId },
+          data: {
+            credits: {
+              decrement: 1,
+            },
+          },
+        });
+
+        // Create meal plan
+        return await tx.mealPlan.create({
+          data: {
+            userId,
+            ...input,
+            plan,
+          },
+        });
       });
 
       return mealPlan;

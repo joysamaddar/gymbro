@@ -84,7 +84,7 @@ export function WeightTracker() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3">
       <div className="h-[300px] col-span-2 [&_.recharts-tooltip-cursor]:hidden">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" className="lg:border-b">
           <AreaChart
             data={
               !isLoading
@@ -128,7 +128,7 @@ export function WeightTracker() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 p-4 flex flex-col justify-center lg:border-l border-border"
+          className="space-y-8 p-4 flex flex-col justify-center lg:border-l lg:border-b border-border"
         >
           <FormField
             control={form.control}
@@ -159,7 +159,7 @@ export function WeightTracker() {
                 Updating...
               </>
             ) : (
-              "Update Weight"
+              "Log Weight"
             )}
           </Button>
         </form>

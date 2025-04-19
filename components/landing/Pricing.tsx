@@ -8,30 +8,57 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { Sparkles, Check } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { SUBSCRIPTION_PLAN_IDS, SUBSCRIPTION_PLANS } from "@/lib/constants";
+import { trpc } from "@/trpc/client";
+import { toast } from "../ui/use-toast";
+import { useUser } from "@clerk/nextjs";
 
 export function Pricing() {
-  const plans = [
-    {
-      name: "Starter",
-      credits: 20,
-      price: "$5",
-      description: "Perfect for beginners",
+  const { user } = useUser();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState<string | null>(null);
+
+  const generateCheckoutSession = trpc.createCheckoutSession.useMutation({
+    onMutate: (data) => {
+      setIsLoading(data.planId);
     },
-    {
-      name: "Trainer",
-      credits: 100,
-      price: "$20",
-      description: "Most popular choice",
+    onSuccess: (data) => {
+      if (data) {
+        router.push(data);
+      }
     },
-    {
-      name: "Elite",
-      credits: 250,
-      price: "$40",
-      description: "Best value for serious users",
+    onSettled: () => {
+      setIsLoading(null);
     },
-  ];
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description:
+          error.message ||
+          "An error occurred while generating the checkout session.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  function handleCheckout(planId: string) {
+    if (!user?.emailAddresses[0].emailAddress) {
+      toast({
+        title: "Alert",
+        description: "Please sign in to purchase a plan",
+      });
+      return;
+    }
+
+    generateCheckoutSession.mutate({
+      email: user.emailAddresses[0].emailAddress,
+      planId: planId as (typeof SUBSCRIPTION_PLAN_IDS)[number],
+    });
+  }
 
   return (
     <section
@@ -68,9 +95,9 @@ export function Pricing() {
           viewport={{ once: true }}
           className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto"
         >
-          {plans.map((plan, index) => (
+          {SUBSCRIPTION_PLANS.map((plan) => (
             <motion.div
-              key={index}
+              key={plan.id}
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 show: { opacity: 1, y: 0 },
@@ -78,10 +105,10 @@ export function Pricing() {
             >
               <Card
                 className={`h-full border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80 transition-all duration-300 group ${
-                  plan.name === "Pro" ? "relative scale-105 shadow-lg" : ""
+                  plan.id === "trainer" ? "relative scale-105 shadow-lg" : ""
                 }`}
               >
-                {plan.name === "Pro" && (
+                {plan.id === "trainer" && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-medium">
                     Most Popular
                   </div>
@@ -93,7 +120,7 @@ export function Pricing() {
                   <CardTitle className="text-2xl mb-3">{plan.name}</CardTitle>
                   <div className="space-y-1">
                     <p className="text-4xl font-bold text-primary">
-                      {plan.price}
+                      ${plan.price / 100}
                     </p>
                     <p className="text-2xl font-semibold text-muted-foreground">
                       {plan.credits} Credits
@@ -108,9 +135,11 @@ export function Pricing() {
                 <CardFooter>
                   <Button
                     className="w-full"
-                    variant={plan.name === "Pro" ? "default" : "outline"}
+                    variant={plan.id === "trainer" ? "default" : "outline"}
+                    onClick={() => handleCheckout(plan.id)}
+                    disabled={isLoading === plan.id}
                   >
-                    Get Started
+                    {isLoading === plan.id ? "Processing..." : "Get Started"}
                   </Button>
                 </CardFooter>
               </Card>

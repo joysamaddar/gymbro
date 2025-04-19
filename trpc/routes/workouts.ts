@@ -1,7 +1,7 @@
 import { procedure } from "../trpc";
 import { auth } from "@clerk/nextjs";
 import { TRPCError } from "@trpc/server";
-import prisma from "@/db";
+import prisma from "@/lib/prisma";
 import { z } from "zod";
 import OpenAI from "openai";
 import { bodyGoal } from "@/@types/bodyGoal";
@@ -28,24 +28,32 @@ export const workoutsRouter = {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
 
-      const profile = await prisma.user.findUnique({
+      const user = await prisma.user.findUnique({
         where: { clerkId: userId },
         select: {
           gender: true,
           age: true,
           height: true,
           disabilities: true,
+          credits: true,
         },
       });
 
-      if (!profile) {
+      if (!user) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "No profile found",
         });
       }
 
-      if (!profile.gender || !profile.age || !profile.height) {
+      if (user.credits < 1) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Insufficient credits. Please purchase more credits to generate a workout plan.",
+        });
+      }
+
+      if (!user.gender || !user.age || !user.height) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Please update your profile to generate a workout plan",
@@ -65,16 +73,16 @@ export const workoutsRouter = {
       }
 
       const prompt = `Generate a personalized workout plan based on the following parameters:
-    Gender: ${profile.gender}
-    Age: ${profile.age}
-    Height: ${profile.height} cm
+    Gender: ${user.gender}
+    Age: ${user.age}
+    Height: ${user.height} cm
     Weight: ${latestWeight.weight} kg
     Body Goal: I want to ${input.bodyGoal}
     Workout days per Week: ${input.daysPerWeek}
     Workout Type: ${input.workoutType}
     Workout Hours per Day: ${input.hoursPerDay}
     Goal (Aesthetics, Strength, Both): ${input.goal}
-    Disabilities: ${profile.disabilities ?? "None"}
+    Disabilities: ${user.disabilities ?? "None"}
 
     Provide a detailed weekly workout plan with specific exercises, sets, reps, and rest periods.`;
 
@@ -92,12 +100,26 @@ export const workoutsRouter = {
         });
       }
 
-      const workoutPlan = await prisma.workoutPlan.create({
-        data: {
-          userId,
-          ...input,
-          plan,
-        },
+      // Start a transaction to create the workout plan and deduct credits
+      const workoutPlan = await prisma.$transaction(async (tx) => {
+        // Deduct credits
+        await tx.user.update({
+          where: { clerkId: userId },
+          data: {
+            credits: {
+              decrement: 1,
+            },
+          },
+        });
+
+        // Create workout plan
+        return await tx.workoutPlan.create({
+          data: {
+            userId,
+            ...input,
+            plan,
+          },
+        });
       });
 
       return workoutPlan;

@@ -1,7 +1,7 @@
 import { procedure } from "../trpc";
 import { auth } from "@clerk/nextjs";
 import { TRPCError } from "@trpc/server";
-import prisma from "@/db";
+import prisma from "@/lib/prisma";
 import { z } from "zod";
 
 export const profileRouter = {
@@ -16,6 +16,25 @@ export const profileRouter = {
     });
 
     return profile;
+  }),
+  getUserCredit: procedure.query(async ({}) => {
+    const { userId } = auth();
+    if (!userId) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { clerkId: userId },
+      select: {
+        credits: true,
+      },
+    });
+
+    if (!user) {
+      throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+    }
+
+    return user.credits;
   }),
   updateProfile: procedure
     .input(
@@ -77,8 +96,7 @@ export const profileRouter = {
 
       if (
         latestWeight &&
-        latestWeight.createdAt.toDateString() ===
-          new Date().toDateString()
+        latestWeight.createdAt.toDateString() === new Date().toDateString()
       ) {
         throw new TRPCError({
           code: "BAD_REQUEST",
