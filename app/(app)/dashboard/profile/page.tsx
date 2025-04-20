@@ -3,7 +3,7 @@ import { ProfileInfo } from "@/components/profile/ProfileInfo";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export default function Workouts() {
+export default function Profile() {
   return (
     <div className="px-4 py-8 flex flex-col gap-8">
       <Heading title="Profile">

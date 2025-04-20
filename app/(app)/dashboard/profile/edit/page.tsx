@@ -2,7 +2,7 @@ import Heading from "@/components/common/Heading";
 import { ProfileForm } from "@/components/profile/ProfileForm";
 import { trpc } from "@/trpc/rsc-client";
 
-export default async function Workouts() {
+export default async function EditProfile() {
   let profile;
   try {
     profile = await trpc.getProfile();
