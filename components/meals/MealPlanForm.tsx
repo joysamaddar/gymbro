@@ -58,11 +58,8 @@ export function MealPlanForm() {
         description:
           "Your personalized meal plan has been created successfully.",
       });
+      router.push(`/dashboard/meals/${data.id}`);
       router.refresh();
-      // Add a small delay before navigation to ensure data is updated
-      setTimeout(() => {
-        router.push(`/dashboard/meals/${data.id}`);
-      }, 100);
     },
     onError: (error) => {
       toast({

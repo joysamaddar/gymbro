@@ -65,11 +65,8 @@ export function ProfileForm({
         title: "Profile Updated",
         description: "Your profile has been updated successfully.",
       });
+      router.push(`/dashboard/profile`);
       router.refresh();
-      // Add a small delay before navigation to ensure data is updated
-      setTimeout(() => {
-        router.push(`/dashboard/profile`);
-      }, 100);
     },
     onError: (error) => {
       toast({
