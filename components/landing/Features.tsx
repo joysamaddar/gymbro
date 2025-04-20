@@ -54,10 +54,10 @@ export function Features() {
             <span className="text-sm font-medium">Powerful Features</span>
           </div>
           <h2 className="text-4xl font-bold mb-4">
-            Everything You Need to Be Fit
+            Your Gym Bro Has Got You Covered
           </h2>
           <p className="text-xl text-muted-foreground">
-            Discover what makes Gymbro your ultimate fitness companion
+            From workouts to nutrition, get exactly what you need
           </p>
         </motion.div>
         <motion.div

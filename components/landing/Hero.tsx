@@ -30,14 +30,13 @@ export function Hero() {
             </motion.div>
 
             <h1 className="text-5xl lg:text-7xl font-bold tracking-tight">
-              Transform Your{" "}
-              <span className="text-primary">Fitness Journey</span> with AI
+              Meet Your New <span className="text-primary">Gym Bro</span>
             </h1>
 
             <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-              Experience personalized workout plans and nutrition guidance
-              powered by artificial intelligence. Your perfect fitness companion
-              is just a click away.
+              Your personal AI fitness companion that knows exactly what you
+              need. From personalized workouts to nutrition advice, your AI gym
+              bro has got your back.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
