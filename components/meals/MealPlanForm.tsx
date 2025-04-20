@@ -46,7 +46,6 @@ const defaultValues: Partial<MealPlanFormValues> = {
 
 export function MealPlanForm() {
   const router = useRouter();
-  const utils = trpc.useUtils();
   const form = useForm<MealPlanFormValues>({
     resolver: zodResolver(mealPlanFormSchema),
     defaultValues,
@@ -59,9 +58,11 @@ export function MealPlanForm() {
         description:
           "Your personalized meal plan has been created successfully.",
       });
-      utils.getUserCredit.invalidate();
-      utils.getLatestMealPlan.invalidate();
-      router.push(`/dashboard/meals/${data.id}`);
+      router.refresh();
+      // Add a small delay before navigation to ensure data is updated
+      setTimeout(() => {
+        router.push(`/dashboard/meals/${data.id}`);
+      }, 100);
     },
     onError: (error) => {
       toast({

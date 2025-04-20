@@ -46,8 +46,6 @@ export function ProfileForm({
     | null
     | undefined;
 }) {
-  const utils = trpc.useUtils();
-
   const defaultValues: Partial<ProfileFormValues> = {
     gender: profile?.gender as "male" | "female" | "other",
     age: profile?.age ?? undefined,
@@ -67,8 +65,11 @@ export function ProfileForm({
         title: "Profile Updated",
         description: "Your profile has been updated successfully.",
       });
-      utils.getProfile.invalidate();
-      router.push(`/dashboard/profile`);
+      router.refresh();
+      // Add a small delay before navigation to ensure data is updated
+      setTimeout(() => {
+        router.push(`/dashboard/profile`);
+      }, 100);
     },
     onError: (error) => {
       toast({
