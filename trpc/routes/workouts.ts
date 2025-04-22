@@ -3,13 +3,9 @@ import { auth } from "@clerk/nextjs";
 import { TRPCError } from "@trpc/server";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
-import OpenAI from "openai";
 import { bodyGoal } from "@/@types/bodyGoal";
 import { workoutType } from "@/@types/workoutType";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { getOpenAIInstance } from "@/lib/openai";
 
 export const workoutsRouter = {
   generateWorkoutPlan: procedure
@@ -49,7 +45,8 @@ export const workoutsRouter = {
       if (user.credits < 1) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Insufficient credits. Please purchase more credits to generate a workout plan.",
+          message:
+            "Insufficient credits. Please purchase more credits to generate a workout plan.",
         });
       }
 
@@ -85,6 +82,8 @@ export const workoutsRouter = {
     Disabilities: ${user.disabilities ?? "None"}
 
     Provide a detailed weekly workout plan with specific exercises, sets, reps, and rest periods.`;
+
+      const openai = getOpenAIInstance();
 
       const completion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",

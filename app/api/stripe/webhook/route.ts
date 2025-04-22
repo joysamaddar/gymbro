@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import prisma from "@/lib/prisma";
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
 export async function POST(req: Request) {
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
   try {
     const body = await req.text();
     const signature = headers().get("stripe-signature");
@@ -15,6 +15,8 @@ export async function POST(req: Request) {
         status: 400,
       });
     }
+
+    const stripe = getStripe();
 
     const event = stripe.webhooks.constructEvent(
       body,

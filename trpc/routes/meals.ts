@@ -3,13 +3,9 @@ import { auth } from "@clerk/nextjs";
 import { TRPCError } from "@trpc/server";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
-import OpenAI from "openai";
 import { dietPreference } from "@/@types/dietPreference";
 import { dietType } from "@/@types/dietType";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { getOpenAIInstance } from "@/lib/openai";
 
 export const mealsRouter = {
   generateMealPlan: procedure
@@ -47,7 +43,8 @@ export const mealsRouter = {
       if (user.credits < 1) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Insufficient credits. Please purchase more credits to generate a meal plan.",
+          message:
+            "Insufficient credits. Please purchase more credits to generate a meal plan.",
         });
       }
 
@@ -81,6 +78,8 @@ export const mealsRouter = {
       Allergies: ${input.allergies || "None"}
 
       Provide a detailed weekly meal plan with specific meals, recipes, and nutritional information.`;
+
+      const openai = getOpenAIInstance();
 
       const completion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",

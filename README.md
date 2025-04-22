@@ -21,7 +21,6 @@ GymBro is a modern web application that helps users create personalized workout 
 - **AI:** OpenAI GPT-3.5
 - **Styling:** Tailwind CSS with shadcn/ui
 - **API Layer:** tRPC for end-to-end type safety
-- **Deployment:** Vercel (recommended)
 
 ## Getting Started
 

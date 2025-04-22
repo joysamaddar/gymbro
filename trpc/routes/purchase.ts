@@ -2,7 +2,7 @@ import { procedure } from "../trpc";
 import { auth } from "@clerk/nextjs";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { SUBSCRIPTION_PLAN_IDS, SUBSCRIPTION_PLANS } from "@/lib/constants";
 
 export const purchaseRouter = {
@@ -36,6 +36,8 @@ export const purchaseRouter = {
           message: "Invalid plan",
         });
       }
+
+      const stripe = getStripe();
 
       const session = await stripe.checkout.sessions.create({
         customer_email: email,
