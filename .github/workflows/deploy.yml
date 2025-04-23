@@ -19,7 +19,9 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            set -e
             cd gymbro
             git pull origin main
+            docker-compose down
             docker-compose build --no-cache
-            docker-compose up -d --build
+            docker-compose up -d
